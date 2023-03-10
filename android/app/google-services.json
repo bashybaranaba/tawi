@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "508574257375",
+    "project_id": "tawi-55dcd",
+    "storage_bucket": "tawi-55dcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508574257375:android:c1d1d565aaac303702596a",
+        "android_client_info": {
+          "package_name": "com.tawidev.tawi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508574257375-4t5cqhq4nfirt84cidqg7ann5kl9p1qj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tawidev.tawi",
+            "certificate_hash": "eb64af70bbef821000cad0e44dc60029630de9b0"
+          }
+        },
+        {
+          "client_id": "508574257375-53aarb2ci833b1e0jkluf655r4ma60i2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu39SaEQjzKE-AE3LWCX79i4O3H6GlSD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508574257375-53aarb2ci833b1e0jkluf655r4ma60i2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

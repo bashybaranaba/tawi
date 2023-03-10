@@ -1,4 +1,4 @@
-package com.example.tawi
+package com.tawidev.tawi
 
 import io.flutter.embedding.android.FlutterActivity
 
