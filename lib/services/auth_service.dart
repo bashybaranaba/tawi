@@ -8,16 +8,15 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // create user obj based on firebase user
-  TawiUser _userFromFirebaseUser(User user) {
-    return TawiUser(uid: user.uid);
-  }
-
   // auth change user stream
-  Stream<TawiUser> get user {
-    return _auth.authStateChanges()
-      .map((User? user) => _userFromFirebaseUser(user!));
-   
+  Stream<TawiUser?> get user {
+    return _auth.authStateChanges().map((firebaseUser) {
+      if (firebaseUser == null) {
+        return null;
+      } else {
+        return TawiUser.fromFirebaseUser(firebaseUser);
+      }
+    });
   }
 
   // sign in with email and password
@@ -35,17 +34,28 @@ class AuthService {
   }
 
   // register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future<TawiUser?> registerWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      User? user = result.user;
-      return _userFromFirebaseUser(user!);
+      return TawiUser(uid: result.user!.uid, email: result.user!.email!);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return null;
+    }
+  }
+  
+
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
       return null;
-    } 
+    }
   }
 
 }

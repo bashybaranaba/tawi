@@ -17,11 +17,21 @@ class MyApp extends StatelessWidget {
   @override
    @override
   Widget build(BuildContext context) {
-    return StreamProvider<TawiUser>.value(
-      value: AuthService().user,
-      initialData: TawiUser(uid: ''),
-      child: const MaterialApp(
-        home: Wrapper(),
+    return MultiProvider(
+      providers: [
+        Provider<AuthService>(create: (_) => AuthService()),
+        StreamProvider<TawiUser?>(
+          initialData: null,
+          create: (context) => context.read<AuthService>().user,
+        ),
+      ],
+      child: MaterialApp(
+        title: 'My App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: const Wrapper(),
       ),
     );
   }

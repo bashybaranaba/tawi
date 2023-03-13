@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:tawi/services/auth_service.dart';
 
 class Register extends StatefulWidget {
+  final Function toggleView;
+  const Register({super.key,  required this.toggleView });
+
   @override
   _RegisterState createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+
+  String error = '';
+  bool loading = false;
+
   late String _email;
   late String _password;
   late String _confirm_password;
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  void _submit() {
-    
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,13 +104,24 @@ class _RegisterState extends State<Register> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _submit,
+                      onPressed: () async {
+                        if(_formKey.currentState!.validate()){
+                          setState(() => loading = true);
+                          dynamic result = await _auth.registerWithEmailAndPassword(_email, _password);
+                          if(result == null) {
+                            setState(() {
+                              loading = false;
+                              error = 'Please supply a valid email';
+                            });
+                          }
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.teal,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        padding: EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10.0),
                       ),
                       child: const Text(
                         "Register",
@@ -117,10 +132,16 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                   ),
+                   const SizedBox(height: 12.0),
+                  
+                  Text(
+                    error,
+                    style: const TextStyle(color: Colors.red, fontSize: 14.0),
+                  ),
                   const SizedBox(height: 15.0),
                   Center(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: ()  =>  widget.toggleView(),
                       child: const Text(
                         "Already have an account? Sign in",
                         
