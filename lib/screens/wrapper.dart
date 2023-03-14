@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tawi/screens/auth/authenticate.dart';
-import 'package:tawi/screens/volunteers/volunteer_screen.dart';
+import 'package:tawi/screens/volunteers/volunteer_home_screen.dart';
 import 'package:tawi/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class Wrapper extends StatelessWidget {
     if (user == null){
       return Authenticate();
     } else {
-      return Home();
+      return VolunteerHome();
     }
     
     

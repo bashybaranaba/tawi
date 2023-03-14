@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tawi/screens/wrapper.dart';
+import 'package:tawi/utils/themes/theme.dart';
 import 'package:tawi/models/user_model.dart';
 import 'package:tawi/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -27,13 +29,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'My App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: const Wrapper(),
+         theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      home: const Wrapper(),
       ),
     );
   }
 }
-
