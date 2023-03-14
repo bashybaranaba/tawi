@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tawi/screens/auth/authenticate.dart';
 import 'package:tawi/screens/volunteers/volunteer_home_screen.dart';
+import 'package:tawi/screens/community/community_screen.dart';
 import 'package:tawi/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
