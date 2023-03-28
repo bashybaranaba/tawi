@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tawi/widgets/bottom_nav_bar.dart';
 import 'package:tawi/widgets/search_bar.dart';
 import 'package:tawi/widgets/event_card.dart';
+import 'package:tawi/widgets/marker_generator.dart';
 import 'package:tawi/utils/themes/colors.dart';
 import 'package:tawi/utils/dummy/events.dart';
 import 'package:tawi/utils/dummy/events_data.dart';
+import 'package:tawi/widgets/map_card.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tawi/services/location_service.dart';
+import 'package:tawi/screens/volunteers/eventDetailsPage.dart';
+import 'package:geolocator/geolocator.dart';
 
 class VolunteerHome extends StatefulWidget {
   const VolunteerHome({super.key});
@@ -29,8 +36,46 @@ class _VolunteerHomeState extends State<VolunteerHome> {
 
   final List<Event> events = event_list;
 
+// // create a marker widget for each event
+//   List<Marker> createMarkers(List<Event> events) {
+//     return events
+//         .map((event) => Marker(
+//               markerId: MarkerId(event.id.toString()),
+//               position: LatLng(event.latitude, event.longitude),
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => EventDetailsScreen(event: event)),
+//                 );
+//               },
+//             ))
+//         .toList();
+//   }
+
+  late Position deviceLocation;
+
+  //  = await getDevicePosition();
+  @override
+  void initState() {
+    super.initState();
+    getDevicePosition().then((value) {
+      setState(() {
+        deviceLocation = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Marker> markers = createMarkers(events, (event) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EventDetailsPage(event: event),
+        ),
+      );
+    });
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -111,18 +156,20 @@ class _VolunteerHomeState extends State<VolunteerHome> {
           //
           SliverToBoxAdapter(
             child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 60),
+                padding: const EdgeInsets.fromLTRB(5, 10, 5, 60),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20), // Image border
+                  borderRadius: BorderRadius.circular(10), // Image border
                   child: Container(
-                    width: 300,
-                    height: (300 * (9 / 12)),
+                    // width: 300,
+                    // height: (320),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Image.network(
-                        'https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg',
-                        fit: BoxFit.cover),
+                    child: MapCard(
+                        showDirections: false,
+                        center: LatLng(
+                            deviceLocation.latitude, deviceLocation.longitude),
+                        markers: markers),
                   ),
                 )), // Add some spacing
           ),
@@ -134,7 +181,18 @@ class _VolunteerHomeState extends State<VolunteerHome> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 // This is the vertically scrolling list
-                return EventCard(event: events[index]);
+                return EventCard(
+                  event: events[index],
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EventDetailsPage(event: events[index]),
+                      ),
+                    );
+                  },
+                );
               },
               childCount: events.length, // Length of items (Events)
             ),
